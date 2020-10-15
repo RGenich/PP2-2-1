@@ -1,0 +1,69 @@
+package hiber.config;
+
+import hiber.model.Car;
+import hiber.model.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.*;
+import org.springframework.core.env.Environment;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.orm.hibernate5.HibernateTransactionManager;
+import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+
+import javax.sql.DataSource;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Properties;
+
+
+@Configuration
+@PropertySource("classpath:db.properties")
+@EnableTransactionManagement
+@ComponentScan(value = "hiber")
+public class AppConfig {
+
+    @Autowired
+    private Environment env;
+
+    @Bean
+    public DataSource getDataSource() {
+        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+        dataSource.setDriverClassName(env.getProperty("db.driver"));
+        dataSource.setUrl(env.getProperty("db.url"));
+        dataSource.setUsername(env.getProperty("db.username"));
+        dataSource.setPassword(env.getProperty("db.password"));
+        return dataSource;
+    }
+
+    @Bean
+    public LocalSessionFactoryBean getSessionFactory() {
+        LocalSessionFactoryBean factoryBean = new LocalSessionFactoryBean();
+        factoryBean.setDataSource(getDataSource());
+
+        Properties props = new Properties();
+        props.put("hibernate.show_sql", env.getProperty("hibernate.show_sql"));
+        props.put("hibernate.hbm2ddl.auto", env.getProperty("hibernate.hbm2ddl.auto"));
+
+        factoryBean.setHibernateProperties(props);
+        factoryBean.setAnnotatedClasses(User.class, Car.class);
+        return factoryBean;
+    }
+
+    @Bean
+    public HibernateTransactionManager getTransactionManager() {
+        HibernateTransactionManager transactionManager = new HibernateTransactionManager();
+        transactionManager.setSessionFactory(getSessionFactory().getObject());
+        return transactionManager;
+    }
+
+    @Bean
+    @Scope("prototype")
+    public Car getCar() {
+        int series = (int) (Math.random() * (999));
+        //тут конечно нет провреки на уникальность, но типа есть
+        List<String> models = Arrays.asList("Moskvich 412", "Volga 3110", "VAZ 2101");
+        Car car = new Car(series, models.get((int) (Math.random() * 3)));
+        return car;
+    }
+}

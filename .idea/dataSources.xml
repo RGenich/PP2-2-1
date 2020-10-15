@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
+    <data-source source="LOCAL" name="jdbc:mysql://localhost:3306/spring_hiber?verifyServerCertificate=false&amp;useSSL=false&amp;requireSSL=false&amp;useLegacyDatetimeCode=false&amp;amp&amp;serverTimezone=UTC" uuid="6f292659-c1a1-4f16-bc84-c4a02fdf8880">
+      <driver-ref>mysql.8</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://localhost:3306/spring_hiber?verifyServerCertificate=false&amp;useSSL=false&amp;requireSSL=false&amp;useLegacyDatetimeCode=false&amp;amp&amp;serverTimezone=UTC</jdbc-url>
+    </data-source>
+  </component>
+</project>
